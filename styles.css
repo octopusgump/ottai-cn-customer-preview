@@ -469,6 +469,7 @@ dialog p { margin: 15px 0 26px; }
   .header-brand { width: 104px; height: 38px; }
   .header-logo-mark { width: 32px; height: 32px; border-radius: 8px; }
   .header-logo-full { width: 98px; height: 32px; }
+  .hero-photo { object-position: 65% center; }
   .hero-copy { padding-top: 18%; }
   .hero-media::after { content: ""; position: absolute; z-index: 2; top: 57.8%; left: 85.7%; width: 8px; aspect-ratio: 1; border-radius: 50%; background: #f7f9ff; opacity: .92; transform: translate(-50%,-50%); }
   .hero-trend-point { display: none; }
