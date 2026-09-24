@@ -76,16 +76,19 @@
       this.images = images;
       this.context = canvas.getContext('2d', { alpha: true });
       if (!this.context) throw new Error('Canvas unavailable');
-      canvas.width = images[0].naturalWidth;
+      this.cropLeft = mobile.matches ? Math.round(images[0].naturalWidth * 160 / 960) : 0;
+      this.cropWidth = mobile.matches ? Math.round(images[0].naturalWidth * 640 / 960) : images[0].naturalWidth;
       this.cropTop = mobile.matches ? Math.round(images[0].naturalHeight * 140 / 768) : 0;
-      canvas.height = mobile.matches ? Math.round(images[0].naturalHeight * 570 / 768) : images[0].naturalHeight;
+      this.cropHeight = mobile.matches ? Math.round(images[0].naturalHeight * 570 / 768) : images[0].naturalHeight;
+      canvas.width = this.cropWidth;
+      canvas.height = this.cropHeight;
       this.frame = -1;
     }
     setProgress(progress) {
       const index = Math.round(Math.max(0, Math.min(1, progress)) * (this.images.length - 1));
       if (index === this.frame) return;
       this.context.clearRect(0, 0, canvas.width, canvas.height);
-      this.context.drawImage(this.images[index], 0, this.cropTop, canvas.width, canvas.height, 0, 0, canvas.width, canvas.height);
+      this.context.drawImage(this.images[index], this.cropLeft, this.cropTop, this.cropWidth, this.cropHeight, 0, 0, canvas.width, canvas.height);
       this.frame = index;
       track.dataset.frame = String(index);
     }
