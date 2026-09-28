@@ -1,6 +1,5 @@
 const header = document.querySelector('[data-header]');
 const sentinel = document.querySelector('.top-sentinel');
-const hero = document.querySelector('[data-hero]');
 const menuButton = document.querySelector('.menu-button');
 const navigation = document.querySelector('#navigation');
 const dialog = document.querySelector('#pending-dialog');
@@ -11,11 +10,6 @@ const headerObserver = new IntersectionObserver(([entry]) => {
   header.classList.toggle('is-scrolled', !entry.isIntersecting);
 }, { threshold: 0 });
 headerObserver.observe(sentinel);
-
-const heroObserver = new IntersectionObserver(([entry]) => {
-  header.classList.toggle('is-past-hero', !entry.isIntersecting);
-}, { threshold: 0, rootMargin: '-72px 0px 0px 0px' });
-heroObserver.observe(hero);
 
 const closeMenu = () => {
   navigation.classList.remove('is-open');
@@ -73,89 +67,19 @@ if (reduceMotion) {
 const report = document.querySelector('[data-report]');
 if (report) {
   const cards = [...report.querySelectorAll('[data-report-card]')];
-  const replayChart = card => {
-    if (reduceMotion) {
-      card.classList.add('is-chart-ready');
-      return;
-    }
-    card.classList.remove('is-chart-ready');
-    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('is-chart-ready')));
-  };
-  const selectCard = index => {
-    cards.forEach((card, cardIndex) => {
-      const active = cardIndex === index;
-      card.classList.toggle('is-active', active);
-      card.setAttribute('aria-pressed', String(active));
-      if (active) replayChart(card);
-    });
-  };
-  cards.forEach((card, index) => {
-    card.addEventListener('click', () => selectCard(index));
-    card.addEventListener('keydown', event => {
-      if (!['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) return;
-      event.preventDefault();
-      const next = (index + (['ArrowDown', 'ArrowRight'].includes(event.key) ? 1 : -1) + cards.length) % cards.length;
-      selectCard(next);
-      cards[next].focus();
-    });
-  });
   if (reduceMotion) {
     cards.forEach(card => card.classList.add('is-chart-ready'));
   } else {
-    const reportObserver = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      replayChart(cards.find(card => card.classList.contains('is-active')) || cards[0]);
-      reportObserver.disconnect();
-    }, { threshold: 0.15 });
-    reportObserver.observe(report);
+    const chartObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-chart-ready');
+        chartObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.28, rootMargin: '0px 0px -8% 0px' });
+    cards.forEach(card => chartObserver.observe(card));
   }
 }
-
-const reportVisual = document.querySelector('.report-visual');
-const precisePointer = matchMedia('(min-width: 901px) and (hover: hover) and (pointer: fine)').matches;
-const initImageParallax = ({ frame, prefix, tilt, shiftX, shiftY, glowY }) => {
-  if (!frame || reduceMotion || !precisePointer) return;
-
-  let animationFrame;
-  const reset = () => {
-    cancelAnimationFrame(animationFrame);
-    frame.style.setProperty(`--${prefix}-tilt-x`, '0deg');
-    frame.style.setProperty(`--${prefix}-tilt-y`, '0deg');
-    frame.style.setProperty(`--${prefix}-shift-x`, '0px');
-    frame.style.setProperty(`--${prefix}-shift-y`, '0px');
-    if (Number.isFinite(glowY)) {
-      frame.style.setProperty(`--${prefix}-glow-x`, '50%');
-      frame.style.setProperty(`--${prefix}-glow-y`, `${glowY}%`);
-    }
-    frame.classList.remove('is-parallax-active');
-  };
-
-  frame.addEventListener('pointermove', event => {
-    const bounds = frame.getBoundingClientRect();
-    const x = Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width - .5) * 2));
-    const y = Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height - .5) * 2));
-
-    cancelAnimationFrame(animationFrame);
-    animationFrame = requestAnimationFrame(() => {
-      frame.style.setProperty(`--${prefix}-tilt-x`, `${(-y * tilt).toFixed(2)}deg`);
-      frame.style.setProperty(`--${prefix}-tilt-y`, `${(x * tilt).toFixed(2)}deg`);
-      frame.style.setProperty(`--${prefix}-shift-x`, `${(x * shiftX).toFixed(2)}px`);
-      frame.style.setProperty(`--${prefix}-shift-y`, `${(y * shiftY).toFixed(2)}px`);
-      if (Number.isFinite(glowY)) {
-        frame.style.setProperty(`--${prefix}-glow-x`, `${(50 + x * 22).toFixed(1)}%`);
-        frame.style.setProperty(`--${prefix}-glow-y`, `${(glowY + y * 16).toFixed(1)}%`);
-      }
-      frame.classList.add('is-parallax-active');
-    });
-  });
-
-  frame.addEventListener('pointerleave', reset);
-  frame.addEventListener('pointercancel', reset);
-};
-
-initImageParallax({ frame: reportVisual, prefix: 'report', tilt: 2.5, shiftX: 8, shiftY: 6, glowY: 38 });
-initImageParallax({ frame: hero, prefix: 'hero', tilt: 1.2, shiftX: 6, shiftY: 4 });
-initImageParallax({ frame: document.querySelector('.brand-story'), prefix: 'brand', tilt: 1.4, shiftX: 7, shiftY: 5, glowY: 36 });
 
 const testimonials = document.querySelector('[data-testimonials]');
 if (testimonials) {
