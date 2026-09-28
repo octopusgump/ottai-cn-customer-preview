@@ -645,9 +645,10 @@ dialog p { margin: 15px 0 26px; }
   .care { min-height: 620px; padding: 0; }
   .care-content { display: block; padding-top: 48px; text-align: left; }
   .care-content h2 { line-height: 1.05; }
-  .care-meta { width: 100%; align-items: stretch; gap: 16px; margin-top: 18px; }
-  .care-content p { max-width: 340px; margin: 0; font-size: 15px; line-height: 1.6; }
-  .care-actions { width: min(100%, 300px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .84fr); gap: 8px; margin: 0 0 0 auto; }
+  .care-meta { width: 100%; align-items: center; gap: 16px; margin-top: 18px; }
+  .care-content p { width: min(100%, 340px); max-width: none; margin: 0; font-size: 15px; line-height: 1.6; text-align: center; text-wrap: normal; }
+  .care-copy-tail { display: block; white-space: nowrap; }
+  .care-actions { width: min(100%, 340px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-self: center; gap: 8px; margin: 0; }
   .care-actions .button { width: 100%; min-width: 0; min-height: 44px; padding-inline: 14px; }
   .brand-story { min-height: 520px; }
   .brand-story-photo { object-position: 61% center; }
