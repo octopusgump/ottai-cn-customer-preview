@@ -167,7 +167,7 @@ p { color: var(--muted); font-size: 17px; line-height: 1.65; }
 .care-content { position: relative; z-index: 1; width: min(var(--content), calc(100% - 96px)); padding-top: clamp(78px, 8vw, 132px); text-align: left; }
 .care-content h2 { color: #0f4a91; font-size: clamp(42px, 4.2vw, 68px); font-weight: 600; line-height: 1; letter-spacing: -.05em; text-align: center; }
 .care-meta { width: 100%; max-width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 28px; margin: 30px 0 0; text-align: left; }
-.care-content p { max-width: 580px; color: #343b43; font-size: clamp(17px, 1.5vw, 22px); text-wrap: balance; }
+.care-content p { max-width: 580px; text-wrap: balance; }
 .care-actions { display: flex; flex: 0 0 auto; justify-content: flex-end; gap: 14px; margin-left: auto; }
 
 .report { background: var(--paper); }
@@ -646,7 +646,7 @@ dialog p { margin: 15px 0 26px; }
   .care-content { display: block; padding-top: 48px; text-align: left; }
   .care-content h2 { line-height: 1.05; }
   .care-meta { width: 100%; align-items: center; gap: 16px; margin-top: 18px; }
-  .care-content p { width: min(100%, 340px); max-width: none; margin: 0; font-size: 15px; line-height: 1.6; text-align: center; text-wrap: normal; }
+  .care-content p { width: min(100%, 340px); max-width: none; margin: 0; text-align: center; text-wrap: normal; }
   .care-copy-tail { display: block; white-space: nowrap; }
   .care-actions { width: min(100%, 340px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-self: center; gap: 8px; margin: 0; }
   .care-actions .button { width: 100%; min-width: 0; min-height: 44px; padding-inline: 14px; }
